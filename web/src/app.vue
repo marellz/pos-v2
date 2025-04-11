@@ -1,29 +1,37 @@
 <template>
-  <div class="flex flex-col h-screen min-h-screen bg-dark text-white overflow-auto">
-    <header>
-      <Container class="flex items-center space-x-4 py-4">
-        <img alt="Vue logo" class="h-10 " src="@/assets/images/logo.svg" width="125" height="125" />
-        <nav class="flex items-center space-x-2 flex-auto">
-          <RouterLink to="/">Home</RouterLink>
-          <RouterLink to="/about">About</RouterLink>
-
-          <div class="!ml-auto flex space-x-2">
-            <template v-if="auth.authenticated">
-              <p>{{ auth.user?.name }}</p>
-              <a href="#logout" @click.prevent="auth.logout">Logout</a>
-            </template>
-            <template v-else>
-              <RouterLink to="/login">Login</RouterLink>
-              <RouterLink to="/register">Register</RouterLink>
-            </template>
-          </div>
-        </nav>
-      </Container>
-    </header>
-    <main class="flex-auto py-10">
-      <RouterView />
-    </main>
-    <footer></footer>
+  <div class="flex h-screen min-h-screen bg-dark text-white overflow-auto">
+    <nav class="w-64 py-6 px-4">
+      <router-link to="/">
+        <p class="text-2xl px-4 font-bold">POS V2</p>
+      </router-link>
+      <ul class="mt-8 space-y-2">
+        <li v-for="(link, index) in links" :key="index">
+          <router-link :to="link.path" class="block px-4 py-2 rounded-lg hover:bg-slate-100/5"
+            exact-active-class="bg-slate-100/10">
+            <span class="">
+              {{ link.label }}
+            </span>
+          </router-link>
+        </li>
+      </ul>
+    </nav>
+    <div class="overflow-auto flex-auto flex flex-col">
+      <header class="py-4">
+        <Container>
+          <Search />
+        </Container>
+      </header>
+      <main class="flex-auto py-10">
+        <Container>
+          <RouterView />
+        </Container>
+      </main>
+      <footer>
+        <Container>
+          <p>Something cool.</p>
+        </Container>
+      </footer>
+    </div>
   </div>
 
 </template>
@@ -31,7 +39,39 @@
 import { RouterLink, RouterView } from 'vue-router'
 import Container from './components/base/container.vue';
 import { useAuthStore } from './stores/auth';
+import Search from './components/form/search.vue';
+import { computed, ref } from 'vue';
 
 const auth = useAuthStore()
+
+const adminLinks = [
+  {
+    path: "/users",
+    label: "Users",
+  },
+]
+
+const guestLinks = [
+  {
+    path: "/",
+    label: "Menu",
+  },
+  {
+    path: "/dashboard",
+    label: "Dashboard",
+  },
+  {
+    path: "/orders",
+    label: "Orders",
+  },
+  {
+    path: "/sales",
+    label: "Sales",
+  },
+
+]
+
+const adminMode = ref(false)
+const links = computed(() => adminMode.value ? [...guestLinks, ...adminLinks] : guestLinks)
 
 </script>
