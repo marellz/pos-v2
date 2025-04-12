@@ -20,7 +20,7 @@
 }
 
 .button {
-  @apply px-4 py-2 bg-primary/20 border border-primary text-primary rounded-lg hover:bg-primary hover:text-white disabled:bg-slate-500/10 disabled:border-slate-500 disabled:text-slate-500;
+  @apply inline-flex items-center space-x-2 px-4 py-2 bg-primary/20 border border-primary text-primary rounded-lg hover:bg-primary hover:text-white disabled:bg-slate-500/10 disabled:border-slate-500 disabled:text-slate-500;
 }
 
 .box {
