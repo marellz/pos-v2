@@ -17,10 +17,16 @@
   --color-secondary: #44355bff;
   --color-dark: #221e22ff;
   --color-dark-alt: #31263eff;
+
+  --color-color-1: #cfdddb;
+  --color-color-2: #e4cded;
+  --color-color-3: #c2dbe9;
+  --color-color-4: #f1c8d0;
+  --color-color-5: #c9caef;
 }
 
 .button {
-  @apply inline-flex items-center space-x-2 px-4 py-2 bg-primary/20 border border-primary text-primary rounded-lg hover:bg-primary hover:text-white disabled:bg-slate-500/10 disabled:border-slate-500 disabled:text-slate-500;
+  @apply inline-flex items-center justify-center text-center space-x-2 px-4 py-2 bg-primary/20 border border-primary text-primary rounded-lg hover:bg-primary hover:text-white disabled:bg-slate-500/10 disabled:border-slate-500 disabled:text-slate-500;
 }
 
 .box {
