@@ -16,21 +16,13 @@
       </ul>
     </nav>
     <div class="overflow-auto flex-auto flex flex-col">
-      <header class="py-4">
-        <Container>
-          <Search />
-        </Container>
-      </header>
+      <header></header>
       <main class="flex-auto py-10">
         <Container>
           <RouterView />
         </Container>
       </main>
-      <footer>
-        <Container>
-          <p>Something cool.</p>
-        </Container>
-      </footer>
+      <footer></footer>
     </div>
   </div>
 
@@ -39,7 +31,6 @@
 import { RouterLink, RouterView } from 'vue-router'
 import Container from './components/base/container.vue';
 import { useAuthStore } from './stores/auth.store';
-import Search from './components/form/search.vue';
 import { computed, ref } from 'vue';
 
 const auth = useAuthStore()
