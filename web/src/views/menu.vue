@@ -1,38 +1,19 @@
 <template>
   <Container>
-    <div class="grid grid-cols-4 gap-10">
-      <div class="space-y-8 col-span-3">
+    <div class="grid lg:grid-cols-3 xl:grid-cols-4 gap-10">
+      <div class="space-y-8 lg:col-span-2 xl:col-span-3">
+        <Search />
         <h1 class="title">Welcome back, {{ auth.userName || 'Stranger' }}</h1>
-
         <div class="space-y-4">
           <h2 class="font-medium">Categories</h2>
-          <div class="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-            <div v-for="(item, index) in formattedCategories" :key="index" class="relative">
-              <input type="radio" class="h-0 w-0 absolute -z-10" v-model="category" :value="item.name"
-                :id="`category-${item.name}`" name="category" />
-              <label :for="`category-${item.name}`">
-                <div class="rounded-xl p-1 border-2 border-transparent"
-                  :class="{ '!border-primary': item.name === category }">
-                  <div class="p-4 rounded-lg" :class="[item.bg]">
-                    <span class="p-3 rounded-full bg-white text-slate-800 inline-block">
-                      <component :is="item.icon" />
-                    </span>
-                    <h2 class="text-2xl font-medium mt-4">
-                      {{ item.label }}
-                    </h2>
-                    <p>
-                      {{ item.count }} items
-                    </p>
-                  </div>
-                </div>
-              </label>
-            </div>
-          </div>
+          <Scrollbar class="flex overflow-auto mr-4 pb-4">
+            <MenuCategory v-for="(item, index) in formattedCategories" :key="index" :item v-model="category" />
+          </Scrollbar>
         </div>
         <hr>
         <div class="space-y-4">
           <h2 class="font-medium">Menu items</h2>
-          <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div class="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
             <div v-for="(item, index) in categoryItems" :key="index" class="flex p-4 rounded-lg bg-slate-100/10">
               <div class="flex-auto">
                 <h1 class="font-medium text-lg">{{ item.item }}</h1>
@@ -47,18 +28,18 @@
 
           </div>
         </div>
-        <hr>
-
       </div>
       <div class="flex-none space-y-4 flex flex-col">
         <h2 class="font-medium">New order</h2>
-
         <ul v-if="order.length" class="space-y-4">
           <li v-for="(item, index) in order" :key="index" class="p-4 rounded-lg bg-slate-100/10">
-            <div class="flex items-center">
-              <div class="flex-auto pr-10">
+            <div class="">
+              <div class="flex items-center space-x-1">
+                <div class="w-6 h-6 rounded-full bg-white text-slate-800 font-bold text-center leading-6 text-sm">
+                  <span>{{ index + 1 }}</span>
+                </div>
                 <h1 class="font-medium text-lg">{{ item.item }}</h1>
-                <p class="text-slate-400">
+                <p class="text-slate-400 ml-auto">
                   Kes. {{ item.price }}</p>
               </div>
               <div class="flex justify-end">
@@ -100,7 +81,7 @@
             </div>
           </div>
           <div>
-            <base-button class="w-full">
+            <base-button class="w-full" :disabled="!order.length">
               <span>Place order</span>
             </base-button>
           </div>
@@ -111,6 +92,7 @@
 </template>
 
 <script setup lang="ts">
+import Scrollbar from '@/components/base/scrollbar.vue';
 import OrderQuantity from '@/components/order/quantity.vue'
 import Container from '@/components/base/container.vue';
 import { categories, items as MenuItems, type Item } from '@/data/menu';
@@ -118,6 +100,8 @@ import { useAuthStore } from '@/stores/auth.store';
 import { computed, ref } from 'vue';
 import { Banknote, Plus, SmartphoneNfc } from 'lucide-vue-next';
 import { useOrderStore } from '@/stores/order.store';
+import Search from '@/components/form/search.vue';
+import MenuCategory from '@/components/menu/category.vue';
 
 const auth = useAuthStore()
 const orderStore = useOrderStore()
@@ -130,7 +114,7 @@ const formattedCategories = computed(() => categories.map(c => {
   return { ...c, count: MenuItems.filter(m => m.category === c.name).length }
 }))
 
-const category = ref('')
+const category = ref('kitchen')
 const categoryItems = computed(() => category.value !== '' ? MenuItems.filter(m => m.category === category.value) : [])
 
 const paymentMethod = ref('')

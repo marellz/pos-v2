@@ -1,11 +1,11 @@
 <template>
-    <div class="flex items-center space-x-4">
+    <div class="flex items-center lg:space-x-1 xl:space-x-4">
         <button class="p-2 disabled:text-slate-100/10" type="button" @click="model -= 1" :disabled="model <= 0">
-            <Minus :size="32" :stroke-width="3" />
+            <Minus :size="24" :stroke-width="3" />
         </button>
-        <span class="p-2 text-4xl font-medium" :class="{ 'text-slate-100/10': model === 0 }">{{ model }}</span>
+        <span class="p-2 md:text-2xl xl:text-4xl font-medium" :class="{ 'text-slate-100/10': model === 0 }">{{ model }}</span>
         <button class="p-2" type="button" @click="model += 1">
-            <Plus :size="32" :stroke-width="3" />
+            <Plus :size="24" :stroke-width="3" />
         </button>
     </div>
 </template>
