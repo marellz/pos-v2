@@ -12,15 +12,15 @@ export enum AuthLoading {
 
 export interface User {
   name: string
-  id: number,
+  id: number
   email: string
 }
-
 
 export interface LoginPayload {
   email: string
   password: string
 }
+
 export interface LoginResponse {
   data?: {
     user: User
@@ -44,6 +44,8 @@ export const useAuthStore = defineStore(
     const user = ref<User | null>(null)
 
     const authenticated = computed(() => user.value !== null)
+    const userName = computed(() => (authenticated.value ? user.value?.name.split(' ')[0] : ''))
+
     const { begin, finish, isLoading } = useLoadingState()
 
     const handleError = (error: any) => {}
@@ -103,6 +105,7 @@ export const useAuthStore = defineStore(
 
     return {
       user,
+      userName,
       authenticated,
       login,
       logout,

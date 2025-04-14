@@ -38,7 +38,7 @@
 <script setup lang="ts">
 import { RouterLink, RouterView } from 'vue-router'
 import Container from './components/base/container.vue';
-import { useAuthStore } from './stores/auth';
+import { useAuthStore } from './stores/auth.store';
 import Search from './components/form/search.vue';
 import { computed, ref } from 'vue';
 

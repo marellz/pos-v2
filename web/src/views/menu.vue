@@ -114,7 +114,7 @@
 import OrderQuantity from '@/components/order/quantity.vue'
 import Container from '@/components/base/container.vue';
 import { categories, items as MenuItems, type Item } from '@/data/menu';
-import { useAuthStore } from '@/stores/auth';
+import { useAuthStore } from '@/stores/auth.store';
 import { computed, ref } from 'vue';
 import { Banknote, Plus, SmartphoneNfc } from 'lucide-vue-next';
 import { useOrderStore } from '@/stores/order.store';

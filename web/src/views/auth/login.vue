@@ -39,7 +39,7 @@
 </template>
 <script lang="ts" setup>
 import FormInput from '@/components/form/input.vue'
-import { AuthLoading, useAuthStore } from "@/stores/auth"
+import { AuthLoading, useAuthStore } from "@/stores/auth.store"
 import { AlertCircle, X } from 'lucide-vue-next'
 import { Form, useForm } from "vee-validate"
 import { computed, onMounted, ref } from "vue"
