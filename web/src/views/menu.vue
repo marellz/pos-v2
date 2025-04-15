@@ -31,8 +31,8 @@
       </div>
       <div class="flex-none space-y-4 flex flex-col">
         <h2 class="font-medium">New order</h2>
-        <ul v-if="order.length" class="space-y-4">
-          <li v-for="(item, index) in order" :key="index" class="p-4 rounded-lg bg-slate-100/10">
+        <ul v-if="(order && order.items.length)" class="space-y-4">
+          <li v-for="(item, index) in order.items" :key="index" class="p-4 rounded-lg bg-slate-100/10">
             <div class="">
               <div class="flex items-center space-x-1">
                 <div class="w-6 h-6 rounded-full bg-white text-slate-800 font-bold text-center leading-6 text-sm">
@@ -81,7 +81,7 @@
             </div>
           </div>
           <div>
-            <base-button class="w-full" :disabled="!order.length">
+            <base-button class="w-full" :disabled="!(order && order.items.length)">
               <span>Place order</span>
             </base-button>
           </div>
@@ -117,7 +117,7 @@ const formattedCategories = computed(() => categories.map(c => {
 const category = ref('kitchen')
 const categoryItems = computed(() => category.value !== '' ? MenuItems.filter(m => m.category === category.value) : [])
 
-const paymentMethod = ref('')
+const paymentMethod = ref('m-pesa')
 const paymentMethods = [
   {
     icon: SmartphoneNfc,

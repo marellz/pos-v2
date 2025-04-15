@@ -3,40 +3,53 @@ import { defineStore } from 'pinia'
 import { acceptHMRUpdate } from 'pinia'
 import type { Item } from '@/data/menu'
 
-export interface OrderItems extends Item {
+export interface OrderItem extends Item {
   quantity: number
+}
+
+export interface Order {
+  id?: number
+  status: string
+  items: OrderItem[]
+  date: string
 }
 
 export const useOrderStore = defineStore(
   'orders',
   () => {
-    const order = ref<OrderItems[]>([])
+    const sidelinedOrders = ref<Order[]>([])
+    const order = ref<Order>()
 
     const orderTotal = computed(() =>
-      order.value.reduce((total, item) => (total += item.price * item.quantity), 0),
+      order.value?.items.reduce(
+        (total, orderItem) => total + orderItem.price * orderItem.quantity,
+        0,
+      ),
     )
 
     const addToOrder = (item: Item) => {
-      let quantity = order.value.find((i) => i.item === item.item)?.quantity || 0
+      let quantity = order.value?.items.find((i) => i.item === item.item)?.quantity || 0
       editOrder((quantity += 1), item)
     }
 
     const editOrder = (quan: number, item: Item) => {
-      let o = [...order.value]
+      let items = order.value ? [...order.value?.items] : []
 
-      const orderIndex = o.findIndex((o) => o.item === item.item)
+      const orderIndex = items.findIndex((_item) => _item.item === item.item)
       const orderExists = orderIndex !== -1
 
       if (quan && orderExists) {
-        o[orderIndex].quantity = quan
+        items[orderIndex].quantity = quan
       } else if (quan === 0 && orderExists) {
-        o.splice(orderIndex, 1)
+        items.splice(orderIndex, 1)
       } else if (quan && !orderExists) {
         const newItem = { ...item, quantity: quan }
-        o = [...o, newItem]
+        items = [...items, newItem]
       }
 
-      order.value = [...o]
+      order.value = order.value
+        ? { ...order.value, items }
+        : { status: 'new', date: new Date().toISOString(), items }
     }
 
     return {
