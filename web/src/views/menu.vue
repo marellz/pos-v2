@@ -21,7 +21,7 @@
                   Kes. {{ item.price }}</p>
               </div>
 
-              <button class="p-2" type="button" @click="addToOrder(item)">
+              <button class="p-2" type="button" @click="orderStore.addToOrder(item)">
                 <Plus :size="32" :stroke-width="3" />
               </button>
             </div>
@@ -43,7 +43,8 @@
                   Kes. {{ item.price }}</p>
               </div>
               <div class="flex justify-end">
-                <order-quantity v-model="item.quantity" @change="(e) => editOrder(e, item)"></order-quantity>
+                <order-quantity v-model="item.quantity"
+                  @change="(quantity) => orderStore.editOrderItems(quantity, item)"></order-quantity>
               </div>
             </div>
           </li>
@@ -81,7 +82,10 @@
             </div>
           </div>
           <div>
-            <base-button class="w-full" :disabled="!(order && order.items.length)">
+            <base-button v-if="editOrderId" class="w-full" :disabled="!orderExists" @click="updateOrder">
+              <span>Update order</span>
+            </base-button>
+            <base-button v-else class="w-full" :disabled="!orderExists" @click="placeOrder">
               <span>Place order</span>
             </base-button>
           </div>
@@ -97,18 +101,19 @@ import OrderQuantity from '@/components/order/quantity.vue'
 import Container from '@/components/base/container.vue';
 import { categories, items as MenuItems, type Item } from '@/data/menu';
 import { useAuthStore } from '@/stores/auth.store';
-import { computed, ref } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 import { Banknote, Plus, SmartphoneNfc } from 'lucide-vue-next';
-import { useOrderStore } from '@/stores/order.store';
+import { useOrderStore, type NewOrder } from '@/stores/order.store';
 import Search from '@/components/form/search.vue';
 import MenuCategory from '@/components/menu/category.vue';
+import { useRoute } from 'vue-router';
 
 const auth = useAuthStore()
 const orderStore = useOrderStore()
 
-const { addToOrder, editOrder } = orderStore
 const order = computed(() => orderStore.order)
 const orderTotal = computed(() => orderStore.orderTotal)
+const orderExists = computed(() => (order.value && order.value.items.length))
 
 const formattedCategories = computed(() => categories.map(c => {
   return { ...c, count: MenuItems.filter(m => m.category === c.name).length }
@@ -130,4 +135,22 @@ const paymentMethods = [
     key: 'Cash',
   },
 ]
+
+
+const editOrderId = computed(() => route.query['edit'] as string)
+
+const route = useRoute()
+
+const updateOrder = () => {
+  if(!editOrderId.value) throw new Error('Cannot find editable Order.')
+  orderStore.updateOrder(Number(editOrderId.value))
+}
+
+const placeOrder = () => { }
+
+onMounted(() => {
+  if (editOrderId.value) {
+    orderStore.editOrder(Number(editOrderId.value))
+  }
+})
 </script>asdas
