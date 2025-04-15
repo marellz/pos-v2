@@ -96,6 +96,27 @@ export const useOrderStore = defineStore(
     const _getTotal = (items: OrderItem[]) => {
       return items.reduce((total, orderItem) => total + orderItem.price * orderItem.quantity, 0)
     }
+
+    const generateFakeOrders = (count: number = 25) => {
+      console.log('Creating a batch of fake orders')
+      orders.value = []
+      const _statuses = [...orderStatuses]
+      _statuses.splice(_statuses.indexOf('new'), 1)
+      for (let index = 0; index < count; index++) {
+        const items = faker.helpers
+          .arrayElements(MenuItems, { min: 2, max: 6 })
+          .map((i) => ({ ...i, quantity: faker.number.int({ min: 1, max: 2 }) }))
+        const total = _getTotal(items)
+        const order = {
+          id: 100 + index,
+          status: faker.helpers.arrayElement(_statuses),
+          date: faker.date.between({ from: '01-04-2025', to: new Date() }).toDateString(),
+          items,
+          total,
+        }
+
+        orders.value = [...orders.value, order]
+      }
     }
 
     return {
@@ -111,6 +132,8 @@ export const useOrderStore = defineStore(
 
       _getTotal,
 
+      // temporary
+      generateFakeOrders,
     }
   },
   {
